@@ -50,7 +50,9 @@ const TotalCountCard = ({
 
       <CardFooter className='flex justify-center'>
         {!!sheetData && sheetData?.length > 0 && (
-          <Button onClick={handleShowTable}>Show Details 📋</Button>
+          <Button onClick={handleShowTable}>
+            {showTable ? "Hide Details 📋" : "Show Details 📋"}
+          </Button>
         )}
       </CardFooter>
 
