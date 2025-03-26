@@ -11,7 +11,7 @@ function App() {
   const [count, setCount] = useState("");
   const [total, setTotal] = useState(0);
 
-  useEffect(() => {
+  const fetchCounterData = () => {
     fetch(SHEET_API_URL)
       .then((res) => res.json())
       .then((data) => {
@@ -28,6 +28,11 @@ function App() {
         );
         setTotal(sum);
       });
+  };
+
+  useEffect(() => {
+    fetchCounterData();
+    //eslinst-disable-next-line
   }, []);
 
   const handleSubmit = async () => {
@@ -62,6 +67,8 @@ function App() {
     };
 
     const isSuccess = await sendDataToSheet(requestData);
+
+    fetchCounterData();
 
     if (isSuccess) {
       console.log("Data sent successfully!");
