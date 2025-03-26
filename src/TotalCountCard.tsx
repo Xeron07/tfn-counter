@@ -48,11 +48,7 @@ const TotalCountCard = ({
       </CardContent>
 
       <CardFooter className='flex justify-center'>
-        <Button
-          onClick={handleShowTable}
-          className='bg-white text-blue-500 hover:bg-blue-100 transition-all'>
-          Show Details 📋
-        </Button>
+        <Button onClick={handleShowTable}>Show Details 📋</Button>
       </CardFooter>
 
       {showTable && (
