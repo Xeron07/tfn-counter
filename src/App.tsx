@@ -15,7 +15,17 @@ function App() {
     fetch(SHEET_API_URL)
       .then((res) => res.json())
       .then((data) => {
-        const sum = data.reduce((acc, row) => acc + Number(row.count), 0);
+        const sum = data.reduce(
+          (
+            acc: number,
+            row: {
+              timestamp: string;
+              name: string;
+              count: number;
+            }
+          ) => acc + Number(row.count),
+          0
+        );
         setTotal(sum);
       });
   }, []);
