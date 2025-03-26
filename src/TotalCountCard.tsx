@@ -56,7 +56,7 @@ const TotalCountCard = ({
   return (
     <div className='w-full max-w-md '>
       {/* 🖥 Desktop View */}
-      <Card className='p-4 shadow-xl rounded-lg mt-6 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white animate-gradient'>
+      <Card className='p-4 shadow-xl rounded-lg mt-6 bg-white'>
         <CardHeader className='text-center'>
           <CardTitle className='text-base md:text-2xl font-bold'>
             ✨ Total Count Till Now ✨
@@ -138,7 +138,7 @@ const TotalCountCard = ({
         </CardFooter>
 
         {showTable && (
-          <div className='hidden md:block mt-4 p-4 bg-gray-100 text-black rounded-lg shadow-lg overflow-hidden'>
+          <div className='hidden md:block mt-4 p-4  text-whiterounded-lg shadow-lg overflow-hidden bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white animate-gradient'>
             <h3 className='text-lg font-semibold mb-3'>📅 Recent Entries</h3>
             <div className='overflow-auto max-h-80 border border-gray-300 rounded-lg'>
               <table className='w-full text-left border-collapse'>
@@ -182,7 +182,7 @@ const TotalCountCard = ({
         )}
         {/* 📱 Mobile View - Table Always Visible */}
         {!!sheetData?.length && (
-          <div className='md:hidden bg-white p-4 rounded-lg shadow-md text-black'>
+          <div className='md:hidden p-4 rounded-lg shadow-md text-white bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white animate-gradient'>
             <h3 className='text-lg font-semibold mb-3 text-center'>
               📅 Recent Entries
             </h3>
