@@ -157,9 +157,8 @@ function App() {
         });
 
         // Google Apps Script returns plain text that needs parsing
-        const text = await response.text();
-        const result = JSON.parse(text);
-        return result.success ?? true;
+        await response.text();
+        return true;
       } catch (error) {
         console.error("Error sending data to sheet:", error);
         return false;
