@@ -3,7 +3,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Sheet } from "lucide-react";
-import axios from "axios";
 
 const SHEET_API_URL = import.meta.env.VITE_SHEET_API_URL || "";
 
@@ -33,19 +32,29 @@ function App() {
 
   const handleSubmit = async () => {
     if (!name || !count) return;
+
     const requestData = {
-      timestamp: new Date().toISOString(), // Automatically sets timestamp
+      timestamp: new Date().toISOString(),
       name,
       count,
     };
 
     const sendDataToSheet = async (data: typeof requestData) => {
       try {
-        const response = await axios.post(
-          import.meta.env.VITE_SHEET_API_URL,
-          data
-        );
-        return response.data.success;
+        // Use fetch instead of axios for better CORS control
+        const response = await fetch(SHEET_API_URL, {
+          method: "POST",
+          mode: "no-cors", // Important for Google Apps Script
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+
+        // Google Apps Script returns plain text that needs parsing
+        const text = await response.text();
+        const result = JSON.parse(text);
+        return result.success;
       } catch (error) {
         console.error("Error sending data to sheet:", error);
         return false;
