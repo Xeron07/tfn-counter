@@ -56,7 +56,7 @@ const TotalCountCard = ({
   return (
     <div className='w-full max-w-md '>
       {/* 🖥 Desktop View */}
-      <Card className='p-4 shadow-xl rounded-lg mt-6'>
+      <Card className='p-4 shadow-xl rounded-lg mt-6 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white animate-gradient'>
         <CardHeader className='text-center'>
           <CardTitle className='text-base md:text-2xl font-bold'>
             ✨ Total Count Till Now ✨
@@ -182,7 +182,7 @@ const TotalCountCard = ({
         )}
         {/* 📱 Mobile View - Table Always Visible */}
         {!!sheetData?.length && (
-          <div className='md:hidden bg-white p-4 rounded-lg shadow-md text-black bg-gray-100'>
+          <div className='md:hidden bg-white p-4 rounded-lg shadow-md text-black'>
             <h3 className='text-lg font-semibold mb-3 text-center'>
               📅 Recent Entries
             </h3>
