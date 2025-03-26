@@ -6,6 +6,7 @@ import { LoaderCircle, LoaderPinwheel, Sheet } from "lucide-react";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import "animate.css";
+import TotalCountCard from "./TotalCountCard";
 
 const SHEET_API_URL = import.meta.env.VITE_SHEET_API_URL || "";
 
@@ -13,6 +14,14 @@ function App() {
   const [name, setName] = useState("");
   const [count, setCount] = useState("");
   const [total, setTotal] = useState(0);
+
+  const [sheetData, setSheetData] = useState<
+    {
+      timestamp: string;
+      name: string;
+      count: number;
+    }[]
+  >([]);
 
   const [fetchLoading, setFetchLoading] = useState(false);
   const [postLoading, setPostLoading] = useState(false);
@@ -34,6 +43,7 @@ function App() {
           0
         );
         setTotal(sum);
+        setSheetData(data);
         setFetchLoading(false);
       });
   };
@@ -227,20 +237,11 @@ function App() {
           </Button>
         </CardContent>
       </Card>
-      <Card className='w-full max-w-md p-4 shadow-xl rounded-lg mt-6 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500  text-white animate-gradient'>
-        <CardHeader className='text-center'>
-          <CardTitle className='text-base md:text-2xl font-bold'>
-            ✨ Total Count Till Now ✨
-          </CardTitle>
-        </CardHeader>
-        <CardContent className='flex justify-center items-center text-xl md:text-4xl font-extrabold'>
-          {fetchLoading ? (
-            <LoaderPinwheel className='animate-spin size-10' />
-          ) : (
-            total
-          )}
-        </CardContent>
-      </Card>
+      <TotalCountCard
+        fetchLoading={fetchLoading}
+        total={total}
+        sheetData={sheetData}
+      />
     </div>
   );
 }
