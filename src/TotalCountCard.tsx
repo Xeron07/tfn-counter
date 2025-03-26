@@ -11,6 +11,7 @@ import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LoaderCircle, LoaderPinwheel } from "lucide-react";
+import { Badge } from "./components/ui/badge";
 
 interface Entry {
   timestamp: string;
@@ -54,8 +55,11 @@ const TotalCountCard = ({
 
   return (
     <div className='w-full max-w-md '>
+      <Badge className='md:hidden block w-full text-center mb-2'>
+        Horipur Squad Tasbih Recitation Count
+      </Badge>
       {/* 🖥 Desktop View */}
-      <Card className='p-4 shadow-xl rounded-lg mt-6 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white animate-gradient'>
+      <Card className='p-4 shadow-xl rounded-lg mt-6'>
         <CardHeader className='text-center'>
           <CardTitle className='text-base md:text-2xl font-bold'>
             ✨ Total Count Till Now ✨
@@ -66,7 +70,9 @@ const TotalCountCard = ({
           {fetchLoading ? (
             <LoaderPinwheel className='animate-spin size-10' />
           ) : (
-            total
+            <Badge className='text-xl md:text-4xl font-bold bg-rose-500'>
+              {total}
+            </Badge>
           )}
         </CardContent>
 
@@ -81,7 +87,15 @@ const TotalCountCard = ({
               <div className='md:hidden flex justify-center mt-4'>
                 <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
                   <DrawerTrigger asChild>
-                    <Button className='w-full'>➕ Add New Entry </Button>
+                    <Button
+                      className='w-full text-black '
+                      variant={"outline"}
+                      style={{
+                        backgroundColor: "white",
+                        border: "1px solid black",
+                      }}>
+                      ➕ Add New Entry{" "}
+                    </Button>
                   </DrawerTrigger>
                   <DrawerContent className='px-6 py-10 bg-white rounded-t-lg shadow-lg'>
                     <h2 className='text-lg font-bold text-center mb-4'>
