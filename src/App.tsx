@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Sheet } from "lucide-react";
+import { LoaderCircle, LoaderPinwheel, Sheet } from "lucide-react";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import "animate.css";
@@ -14,7 +14,11 @@ function App() {
   const [count, setCount] = useState("");
   const [total, setTotal] = useState(0);
 
+  const [fetchLoading, setFetchLoading] = useState(false);
+  const [postLoading, setPostLoading] = useState(false);
+
   const fetchCounterData = () => {
+    setFetchLoading(true);
     fetch(SHEET_API_URL)
       .then((res) => res.json())
       .then((data) => {
@@ -30,6 +34,7 @@ function App() {
           0
         );
         setTotal(sum);
+        setFetchLoading(false);
       });
   };
 
@@ -65,8 +70,73 @@ function App() {
     });
   };
 
+  // Validation utilities
+  const validateName = (name: string): { valid: boolean; message?: string } => {
+    if (!name || name.trim() === "") {
+      return { valid: false, message: "Name is required" };
+    }
+    if (name.length > 20) {
+      return { valid: false, message: "Name must be 20 characters or less" };
+    }
+    if (/[<>{}]/.test(name)) {
+      return { valid: false, message: "Name contains invalid characters" };
+    }
+    return { valid: true };
+  };
+
+  const validateCount = (
+    count: string
+  ): { valid: boolean; message?: string } => {
+    if (!count || count.trim() === "") {
+      return { valid: false, message: "Count is required" };
+    }
+    if (!/^\d+$/.test(count)) {
+      return { valid: false, message: "Count must be a number" };
+    }
+    const num = parseInt(count, 10);
+    if (num > 9999) {
+      return { valid: false, message: "Count must be less than 9999" };
+    }
+    if (num <= 0) {
+      return { valid: false, message: "Count must be positive" };
+    }
+    return { valid: true };
+  };
+
   const handleSubmit = async () => {
-    if (!name || !count) return;
+    // Validate inputs
+    const nameValidation = validateName(name);
+    const countValidation = validateCount(count);
+
+    if (!nameValidation.valid || !countValidation.valid) {
+      await Swal.fire({
+        title: "🚨 Oops! Something’s Missing! 🚨",
+        html: `
+    <div style="
+      text-align: center;
+      padding: 15px;
+      border: 2px dashed #ff6b6b;
+      border-radius: 10px;
+      background-color: #fff3f3;
+      color: #d63031;
+      font-size: 16px;
+      font-weight: bold;
+      display: inline-block;
+    ">
+      ${nameValidation.message ? `<p>⚠️ ${nameValidation.message}</p>` : ""}
+      ${countValidation.message ? `<p>⚠️ ${countValidation.message}</p>` : ""}
+    </div>
+    <p style="margin-top: 15px;">Let's fix this and try again! 💪😃</p>
+  `,
+        icon: "error",
+        confirmButtonColor: "#ff6b6b",
+        confirmButtonText: "Got it! 🔄",
+        showClass: {
+          popup: "animate__animated animate__headShake",
+        },
+      });
+      return;
+    }
 
     const requestData = {
       timestamp: new Date().toISOString(),
@@ -89,25 +159,23 @@ function App() {
         // Google Apps Script returns plain text that needs parsing
         const text = await response.text();
         const result = JSON.parse(text);
-        return result.success;
+        return result.success ?? true;
       } catch (error) {
         console.error("Error sending data to sheet:", error);
         return false;
       }
     };
 
-    try {
-      await sendDataToSheet(requestData);
-
+    setPostLoading(true);
+    const response = await sendDataToSheet(requestData);
+    if (response) {
       fetchCounterData();
       showSuccessAlert();
 
-      console.log("Data sent successfully!");
       setName("");
       setCount("");
       setTotal((prev) => prev + Number(count));
-    } catch (err) {
-      console.error(err);
+    } else {
       await Swal.fire({
         title: "Oops!",
         text: "Something went wrong. Please try again.",
@@ -115,6 +183,8 @@ function App() {
         confirmButtonText: "Try Again",
       });
     }
+
+    setPostLoading(false);
   };
 
   return (
@@ -144,8 +214,17 @@ function App() {
             value={count}
             onChange={(e) => setCount(e.target.value)}
           />
-          <Button className='bg-green-500 text-white' onClick={handleSubmit}>
-            Submit
+          <Button
+            className='bg-green-500 text-white flex justify-center items-center gap-2'
+            onClick={handleSubmit}
+            disabled={postLoading || fetchLoading}>
+            {postLoading ? (
+              <>
+                Submitting... <LoaderCircle className='animate-spin' />
+              </>
+            ) : (
+              "Submit"
+            )}
           </Button>
         </CardContent>
       </Card>
@@ -156,7 +235,11 @@ function App() {
           </CardTitle>
         </CardHeader>
         <CardContent className='flex justify-center items-center text-xl md:text-4xl font-extrabold'>
-          {total}
+          {fetchLoading ? (
+            <LoaderPinwheel className='animate-spin size-10' />
+          ) : (
+            total
+          )}
         </CardContent>
       </Card>
     </div>
