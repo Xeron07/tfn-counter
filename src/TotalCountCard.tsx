@@ -157,7 +157,7 @@ const TotalCountCard = ({
                   </tr>
                 </thead>
                 {/* Table Body */}
-                <tbody className='max-h-[10vh] overflow-y-auto bg-white'>
+                <tbody className='max-h-[10vh] overflow-y-auto bg-white text-black'>
                   {sheetData.map((entry, index) => (
                     <tr
                       key={index}
@@ -201,7 +201,7 @@ const TotalCountCard = ({
                     </th>
                   </tr>
                 </thead>
-                <tbody className='bg-white'>
+                <tbody className='bg-white text-black'>
                   {sheetData.map((entry, index) => (
                     <tr
                       key={index}
