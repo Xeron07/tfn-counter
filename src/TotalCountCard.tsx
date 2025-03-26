@@ -55,9 +55,6 @@ const TotalCountCard = ({
 
   return (
     <div className='w-full max-w-md '>
-      <Badge className='md:hidden block w-full text-center mb-2'>
-        Horipur Squad Tasbih Recitation Count
-      </Badge>
       {/* 🖥 Desktop View */}
       <Card className='p-4 shadow-xl rounded-lg mt-6'>
         <CardHeader className='text-center'>
@@ -141,7 +138,7 @@ const TotalCountCard = ({
         </CardFooter>
 
         {showTable && (
-          <div className='hidden md:block mt-4 p-4 bg-white text-black rounded-lg shadow-lg overflow-hidden'>
+          <div className='hidden md:block mt-4 p-4 bg-gray-100 text-black rounded-lg shadow-lg overflow-hidden'>
             <h3 className='text-lg font-semibold mb-3'>📅 Recent Entries</h3>
             <div className='overflow-auto max-h-80 border border-gray-300 rounded-lg'>
               <table className='w-full text-left border-collapse'>
@@ -160,7 +157,7 @@ const TotalCountCard = ({
                   </tr>
                 </thead>
                 {/* Table Body */}
-                <tbody className='max-h-[10vh] overflow-y-auto'>
+                <tbody className='max-h-[10vh] overflow-y-auto bg-white'>
                   {sheetData.map((entry, index) => (
                     <tr
                       key={index}
@@ -185,7 +182,7 @@ const TotalCountCard = ({
         )}
         {/* 📱 Mobile View - Table Always Visible */}
         {!!sheetData?.length && (
-          <div className='md:hidden bg-white p-4 rounded-lg shadow-md text-black '>
+          <div className='md:hidden bg-white p-4 rounded-lg shadow-md text-black bg-gray-100'>
             <h3 className='text-lg font-semibold mb-3 text-center'>
               📅 Recent Entries
             </h3>
@@ -204,7 +201,7 @@ const TotalCountCard = ({
                     </th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className='bg-white'>
                   {sheetData.map((entry, index) => (
                     <tr
                       key={index}
@@ -228,6 +225,9 @@ const TotalCountCard = ({
           </div>
         )}
       </Card>
+      <Badge className='md:hidden block w-full text-center mt-2'>
+        Horipur Squad Tasbih Recitation Count
+      </Badge>
     </div>
   );
 };
