@@ -3,6 +3,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Sheet } from "lucide-react";
+import Swal from "sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
+import "animate.css";
 
 const SHEET_API_URL = import.meta.env.VITE_SHEET_API_URL || "";
 
@@ -35,6 +38,33 @@ function App() {
     //eslinst-disable-next-line
   }, []);
 
+  const showSuccessAlert = async () => {
+    await Swal.fire({
+      title: '<span style="color: #4ecdc4">🎉 Success! 🎉</span>',
+      html: `
+            <div style="font-size: 1.1rem">
+              <p>Thank you for participating! 💖</p>
+              <p>Your count of <strong>${count}</strong> has been recorded.</p>
+              <p style="font-size: 0.9rem; margin-top: 10px">You're amazing! ✨</p>
+            </div>
+          `,
+      icon: "success",
+      background: "#f8f9fa",
+      showConfirmButton: true,
+      confirmButtonText: "Got it! 😊",
+      confirmButtonColor: "#4ecdc4",
+      showClass: {
+        popup: "animate__animated animate__fadeInDown",
+      },
+      hideClass: {
+        popup: "animate__animated animate__fadeOutUp",
+      },
+      timer: 10000,
+      timerProgressBar: true,
+      footer: "<small>Horipur Squad Counter</small>",
+    });
+  };
+
   const handleSubmit = async () => {
     if (!name || !count) return;
 
@@ -66,15 +96,24 @@ function App() {
       }
     };
 
-    const isSuccess = await sendDataToSheet(requestData);
+    try {
+      await sendDataToSheet(requestData);
 
-    fetchCounterData();
+      fetchCounterData();
+      showSuccessAlert();
 
-    if (isSuccess) {
       console.log("Data sent successfully!");
       setName("");
       setCount("");
       setTotal((prev) => prev + Number(count));
+    } catch (err) {
+      console.error(err);
+      await Swal.fire({
+        title: "Oops!",
+        text: "Something went wrong. Please try again.",
+        icon: "error",
+        confirmButtonText: "Try Again",
+      });
     }
   };
 
