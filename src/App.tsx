@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import "animate.css";
 import TotalCountCard from "./TotalCountCard";
+import toast from "react-hot-toast";
 
 const SHEET_API_URL = import.meta.env.VITE_SHEET_API_URL || "";
 
@@ -113,87 +114,105 @@ function App() {
     return { valid: true };
   };
 
-  const handleSubmit = async () => {
-    // Validate inputs
-    const nameValidation = validateName(name);
-    const countValidation = validateCount(count);
+  const handleSubmit = (): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      (async () => {
+        try {
+          // Validate inputs
+          const nameValidation = validateName(name);
+          const countValidation = validateCount(count);
 
-    if (!nameValidation.valid || !countValidation.valid) {
-      await Swal.fire({
-        title: "🚨 Oops! Something’s Missing! 🚨",
-        html: `
-    <div style="
-      text-align: center;
-      padding: 15px;
-      border: 2px dashed #ff6b6b;
-      border-radius: 10px;
-      background-color: #fff3f3;
-      color: #d63031;
-      font-size: 16px;
-      font-weight: bold;
-      display: inline-block;
-    ">
-      ${nameValidation.message ? `<p>⚠️ ${nameValidation.message}</p>` : ""}
-      ${countValidation.message ? `<p>⚠️ ${countValidation.message}</p>` : ""}
-    </div>
-    <p style="margin-top: 15px;">Let's fix this and try again! 💪😃</p>
-  `,
-        icon: "error",
-        confirmButtonColor: "#ff6b6b",
-        confirmButtonText: "Got it! 🔄",
-        showClass: {
-          popup: "animate__animated animate__headShake",
-        },
-      });
-      return;
-    }
+          if (!nameValidation.valid || !countValidation.valid) {
+            await Swal.fire({
+              title: "🚨 Oops! Something’s Missing! 🚨",
+              html: `
+            <div style="
+              text-align: center;
+              padding: 15px;
+              border: 2px dashed #ff6b6b;
+              border-radius: 10px;
+              background-color: #fff3f3;
+              color: #d63031;
+              font-size: 16px;
+              font-weight: bold;
+              display: inline-block;
+            ">
+              ${
+                nameValidation.message
+                  ? `<p>⚠️ ${nameValidation.message}</p>`
+                  : ""
+              }
+              ${
+                countValidation.message
+                  ? `<p>⚠️ ${countValidation.message}</p>`
+                  : ""
+              }
+            </div>
+            <p style="margin-top: 15px;">Let's fix this and try again! 💪😃</p>
+            `,
+              icon: "error",
+              confirmButtonColor: "#ff6b6b",
+              confirmButtonText: "Got it! 🔄",
+              showClass: {
+                popup: "animate__animated animate__headShake",
+              },
+            });
 
-    const requestData = {
-      timestamp: new Date().toISOString(),
-      name,
-      count,
-    };
+            return reject(new Error("Validation failed"));
+          }
 
-    const sendDataToSheet = async (data: typeof requestData) => {
-      try {
-        // Use fetch instead of axios for better CORS control
-        const response = await fetch(SHEET_API_URL, {
-          method: "POST",
-          mode: "no-cors", // Important for Google Apps Script
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
+          const requestData = {
+            timestamp: new Date().toISOString(),
+            name,
+            count,
+          };
 
-        // Google Apps Script returns plain text that needs parsing
-        await response.text();
-        return true;
-      } catch (error) {
-        console.error("Error sending data to sheet:", error);
-        return false;
-      }
-    };
+          const sendDataToSheet = async (data: typeof requestData) => {
+            try {
+              console.log({ name, count });
+              const response = await fetch(SHEET_API_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+              });
 
-    setPostLoading(true);
-    const response = await sendDataToSheet(requestData);
-    if (response) {
-      fetchCounterData();
-      showSuccessAlert();
+              return response?.status === 200;
+            } catch (error) {
+              console.error("Error sending data to sheet:", error);
+              return false;
+            }
+          };
 
-      setName("");
-      setCount("");
-      setTotal((prev) => prev + Number(count));
-    } else {
-      await Swal.fire({
-        title: "Oops!",
-        text: "Something went wrong. Please try again.",
-        icon: "error",
-        confirmButtonText: "Try Again",
-      });
-    }
+          setPostLoading(true);
+          const response = await sendDataToSheet(requestData);
 
-    setPostLoading(false);
+          if (response) {
+            fetchCounterData();
+            showSuccessAlert();
+            setName("");
+            setCount("");
+            setTotal((prev) => prev + Number(count));
+            setPostLoading(false);
+            resolve(); // Success
+          } else {
+            toast.error(
+              "Something went wrong. Please try again or reload the page"
+            );
+
+            setPostLoading(false);
+            reject(new Error("Failed to send data"));
+          }
+        } catch (error) {
+          console.error("Unexpected error:", error);
+          setPostLoading(false);
+          toast.error("Something went wrong. Please try again");
+          reject(error);
+        }
+      })();
+    });
   };
 
   return (
@@ -204,7 +223,7 @@ function App() {
           "url('https://res.cloudinary.com/emerging-it/image/upload/v1742947752/cdn/qp9gycwdk8qhvhxyxqu0.jpg')",
         backgroundSize: "cover",
       }}>
-      <Card className='w-full max-w-md p-6 bg-white shadow-xl rounded-lg'>
+      <Card className='hidden md:block w-full max-w-md p-6 bg-white shadow-xl rounded-lg'>
         <CardHeader>
           <CardTitle className='text-xl font-semibold mb-4 flex items-center justify-center gap-2'>
             <Sheet className='text-green-400 text-3xl' /> Entry For Tasbih Count
@@ -241,6 +260,12 @@ function App() {
         fetchLoading={fetchLoading}
         total={total}
         sheetData={sheetData}
+        name={name}
+        count={count}
+        postLoading={postLoading}
+        handleChangeCount={setCount}
+        handleChangeName={setName}
+        handleSubmitData={handleSubmit}
       />
     </div>
   );
