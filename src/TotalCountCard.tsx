@@ -48,7 +48,9 @@ const TotalCountCard = ({
       </CardContent>
 
       <CardFooter className='flex justify-center'>
-        <Button onClick={handleShowTable}>Show Details 📋</Button>
+        {!fetchLoading && (
+          <Button onClick={handleShowTable}>Show Details 📋</Button>
+        )}
       </CardFooter>
 
       {showTable && (
