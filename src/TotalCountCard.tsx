@@ -53,7 +53,7 @@ const TotalCountCard = ({
   };
 
   return (
-    <div className='w-full max-w-md mt-[-300px] md:mt-0'>
+    <div className='w-full max-w-md '>
       {/* 🖥 Desktop View */}
       <Card className='p-4 shadow-xl rounded-lg mt-6 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white animate-gradient'>
         <CardHeader className='text-center'>
@@ -83,7 +83,7 @@ const TotalCountCard = ({
                   <DrawerTrigger asChild>
                     <Button className='w-full'>➕ Add New Entry </Button>
                   </DrawerTrigger>
-                  <DrawerContent className='p-4 bg-white rounded-t-lg shadow-lg'>
+                  <DrawerContent className='px-6 py-10 bg-white rounded-t-lg shadow-lg'>
                     <h2 className='text-lg font-bold text-center mb-4'>
                       📝 Add New Entry
                     </h2>
