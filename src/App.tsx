@@ -169,7 +169,6 @@ function App() {
 
           const sendDataToSheet = async (data: typeof requestData) => {
             try {
-              console.log({ name, count });
               const response = await fetch(SHEET_API_URL, {
                 method: "POST",
                 mode: "no-cors",
@@ -179,7 +178,9 @@ function App() {
                 body: JSON.stringify(data),
               });
 
-              return response?.status === 200;
+              console.log("response:", response);
+
+              return true;
             } catch (error) {
               console.error("Error sending data to sheet:", error);
               return false;
