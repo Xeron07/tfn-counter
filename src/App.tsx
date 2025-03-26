@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Sheet } from "lucide-react";
+import axios from "axios";
 
 const SHEET_API_URL = import.meta.env.VITE_SHEET_API_URL || "";
 
@@ -32,19 +33,33 @@ function App() {
 
   const handleSubmit = async () => {
     if (!name || !count) return;
+    const requestData = {
+      timestamp: new Date().toISOString(), // Automatically sets timestamp
+      name,
+      count,
+    };
 
-    const timestamp = new Date().toISOString();
-    const newData = { timestamp, name, count: Number(count) };
+    const sendDataToSheet = async (data: typeof requestData) => {
+      try {
+        const response = await axios.post(
+          import.meta.env.VITE_SHEET_API_URL,
+          data
+        );
+        return response.data.success;
+      } catch (error) {
+        console.error("Error sending data to sheet:", error);
+        return false;
+      }
+    };
 
-    await fetch(SHEET_API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newData),
-    });
+    const isSuccess = await sendDataToSheet(requestData);
 
-    setName("");
-    setCount("");
-    setTotal((prev) => prev + Number(count));
+    if (isSuccess) {
+      console.log("Data sent successfully!");
+      setName("");
+      setCount("");
+      setTotal((prev) => prev + Number(count));
+    }
   };
 
   return (
