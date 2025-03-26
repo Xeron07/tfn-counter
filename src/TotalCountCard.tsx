@@ -27,8 +27,9 @@ const TotalCountCard = ({
   const [showTable, setShowTable] = useState(false);
 
   const handleShowTable = () => {
-    setShowTable(true);
-    setTimeout(() => setShowTable(false), 60000); // Auto-hide after 1 minute (60,000ms)
+    if (!showTable) setTimeout(() => setShowTable(false), 60000);
+    // Auto-hide after 1 minute (60,000ms)
+    setShowTable((prev) => !prev);
   };
 
   return (
