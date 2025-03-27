@@ -44,7 +44,7 @@ function App() {
           0
         );
         setTotal(sum);
-        setSheetData(data);
+        setSheetData(data.length ? data.reverse() : []);
         setFetchLoading(false);
       });
   };

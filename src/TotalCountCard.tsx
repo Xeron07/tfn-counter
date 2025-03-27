@@ -138,7 +138,7 @@ const TotalCountCard = ({
         </CardFooter>
 
         {showTable && (
-          <div className='hidden md:block mt-4 p-4  text-whiterounded-lg shadow-lg overflow-hidden bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white animate-gradient'>
+          <div className='hidden md:block mt-4 p-4 rounded-lg shadow-lg overflow-hidden bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white animate-gradient'>
             <h3 className='text-lg font-semibold mb-3'>📅 Recent Entries</h3>
             <div className='overflow-auto max-h-80 border border-gray-300 rounded-lg'>
               <table className='w-full text-left border-collapse'>
@@ -158,7 +158,7 @@ const TotalCountCard = ({
                 </thead>
                 {/* Table Body */}
                 <tbody className='max-h-[10vh] overflow-y-auto bg-white text-black'>
-                  {sheetData.reverse().map((entry, index) => (
+                  {sheetData.map((entry, index) => (
                     <tr
                       key={index}
                       className='border-b border-gray-300 hover:bg-gray-50'>
@@ -182,7 +182,7 @@ const TotalCountCard = ({
         )}
         {/* 📱 Mobile View - Table Always Visible */}
         {!!sheetData?.length && (
-          <div className='md:hidden p-4 rounded-lg shadow-md text-white bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white animate-gradient'>
+          <div className='md:hidden p-4 rounded-lg shadow-md bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white animate-gradient'>
             <h3 className='text-lg font-semibold mb-3 text-center'>
               📅 Recent Entries
             </h3>
@@ -202,7 +202,7 @@ const TotalCountCard = ({
                   </tr>
                 </thead>
                 <tbody className='bg-white text-black'>
-                  {sheetData.reverse().map((entry, index) => (
+                  {sheetData.map((entry, index) => (
                     <tr
                       key={index}
                       className='border-b border-gray-300 hover:bg-gray-50'>
