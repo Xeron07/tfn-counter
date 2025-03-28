@@ -29,6 +29,7 @@ const TotalCountCard = ({
   handleSubmitData,
   handleChangeName,
   handleChangeCount,
+  setViewTasbihCounter,
 }: {
   total: number;
   fetchLoading: boolean;
@@ -39,6 +40,7 @@ const TotalCountCard = ({
   handleChangeName: (val: string) => void;
   handleChangeCount: (val: string) => void;
   handleSubmitData: () => Promise<void>;
+  setViewTasbihCounter: () => void;
 }) => {
   const [showTable, setShowTable] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -81,7 +83,7 @@ const TotalCountCard = ({
               </Button>
 
               {/* 📱 Mobile View - Add New Entry Button */}
-              <div className='md:hidden flex justify-center mt-4'>
+              <div className='md:hidden grid grid-cols-2 gap-2 mt-4'>
                 <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
                   <DrawerTrigger asChild>
                     <Button
@@ -132,6 +134,16 @@ const TotalCountCard = ({
                     </div>
                   </DrawerContent>
                 </Drawer>
+                <Button
+                  className='w-full text-black '
+                  variant={"outline"}
+                  style={{
+                    backgroundColor: "white",
+                    border: "1px solid black",
+                  }}
+                  onClick={() => setViewTasbihCounter()}>
+                  📿 Recite Tasbih{" "}
+                </Button>
               </div>
             </>
           )}

@@ -1,6 +1,21 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@font-face {
+  font-family: "Electrolize";
+  src: url("https://fonts.googleapis.com/css2?family=Electrolize&family=Poetsen+One&display=swap");
+  /* Alternatively use a local file */
+}
+
+html {
+  touch-action: manipulation;
+}
+
+.digital-display {
+  font-family:"Electrolize", sans-serif;
+  letter-spacing: 2px;
+}
+
 @custom-variant dark (&:is(.dark *));
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -199,4 +214,27 @@ button:focus-visible {
 .animate-gradient {
   background-size: 200% 200%;
   animation: gradientBG 6s ease infinite;
+}
+
+.odometer-car-theme {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+.odometer-car-theme .odometer-digit {
+  min-width: 0.6em;
+}
+.odometer-car-theme .odometer-ribbon {
+  padding: 0 1px; /* Adjust spacing between digits */
+}
+.odometer.odometer-theme-car {
+  font-family: monospace !important;
+}
+
+button:focus,
+button:active,
+button:hover {
+  outline: none !important;
+  box-shadow: none !important;
+  border: #1a1a1a;
 }

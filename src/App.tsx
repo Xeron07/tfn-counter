@@ -8,6 +8,7 @@ import "sweetalert2/dist/sweetalert2.min.css";
 import "animate.css";
 import TotalCountCard from "./TotalCountCard";
 import toast from "react-hot-toast";
+import TasbihCounter from "./TasbihCounter";
 
 const SHEET_API_URL = import.meta.env.VITE_SHEET_API_URL || "";
 
@@ -15,6 +16,7 @@ function App() {
   const [name, setName] = useState("");
   const [count, setCount] = useState("");
   const [total, setTotal] = useState(0);
+  const [viewTasbihCounter, setViewTasbihCounter] = useState(false);
 
   const [sheetData, setSheetData] = useState<
     {
@@ -197,6 +199,7 @@ function App() {
             setCount("");
             setTotal((prev) => prev + Number(count));
             setPostLoading(false);
+            setViewTasbihCounter(false);
             resolve(); // Success
           } else {
             toast.error(
@@ -224,50 +227,66 @@ function App() {
           "url('https://res.cloudinary.com/emerging-it/image/upload/v1742947752/cdn/qp9gycwdk8qhvhxyxqu0.jpg')",
         backgroundSize: "cover",
       }}>
-      <Card className='hidden md:block w-full max-w-md p-6 bg-white shadow-xl rounded-lg'>
-        <CardHeader>
-          <CardTitle className='text-xl font-semibold mb-4 flex items-center justify-center gap-2'>
-            <Sheet className='text-green-400 text-3xl' /> Entry For Tasbih Count
-          </CardTitle>
-        </CardHeader>
-        <CardContent className='flex flex-col gap-4'>
-          <Input
-            type='text'
-            placeholder='Name'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+      {!viewTasbihCounter && (
+        <>
+          <Card className='hidden md:block w-full max-w-md p-6 bg-white shadow-xl rounded-lg'>
+            <CardHeader>
+              <CardTitle className='text-xl font-semibold mb-4 flex items-center justify-center gap-2'>
+                <Sheet className='text-green-400 text-3xl' /> Entry For Tasbih
+                Count
+              </CardTitle>
+            </CardHeader>
+            <CardContent className='flex flex-col gap-4'>
+              <Input
+                type='text'
+                placeholder='Name'
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <Input
+                type='number'
+                placeholder='Count'
+                value={count}
+                onChange={(e) => setCount(e.target.value)}
+              />
+              <Button
+                className='bg-green-500 text-white flex justify-center items-center gap-2'
+                onClick={handleSubmit}
+                disabled={postLoading || fetchLoading}>
+                {postLoading ? (
+                  <>
+                    Submitting... <LoaderCircle className='animate-spin' />
+                  </>
+                ) : (
+                  "Submit"
+                )}
+              </Button>
+            </CardContent>
+          </Card>
+          <TotalCountCard
+            fetchLoading={fetchLoading}
+            total={total}
+            sheetData={sheetData}
+            name={name}
+            count={count}
+            postLoading={postLoading}
+            handleChangeCount={setCount}
+            handleChangeName={setName}
+            handleSubmitData={handleSubmit}
+            setViewTasbihCounter={() => setViewTasbihCounter(true)}
           />
-          <Input
-            type='number'
-            placeholder='Count'
-            value={count}
-            onChange={(e) => setCount(e.target.value)}
-          />
-          <Button
-            className='bg-green-500 text-white flex justify-center items-center gap-2'
-            onClick={handleSubmit}
-            disabled={postLoading || fetchLoading}>
-            {postLoading ? (
-              <>
-                Submitting... <LoaderCircle className='animate-spin' />
-              </>
-            ) : (
-              "Submit"
-            )}
-          </Button>
-        </CardContent>
-      </Card>
-      <TotalCountCard
-        fetchLoading={fetchLoading}
-        total={total}
-        sheetData={sheetData}
-        name={name}
-        count={count}
-        postLoading={postLoading}
-        handleChangeCount={setCount}
-        handleChangeName={setName}
-        handleSubmitData={handleSubmit}
-      />
+        </>
+      )}
+
+      {viewTasbihCounter && (
+        <TasbihCounter
+          name={name}
+          postLoading={postLoading}
+          handleChangeCount={setCount}
+          handleChangeName={setName}
+          handleSubmitData={handleSubmit}
+        />
+      )}
     </div>
   );
 }
