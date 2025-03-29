@@ -36,7 +36,13 @@ export default function TasbihCounter({
   handleSubmitData: () => Promise<void>;
   handleToggleCounter: (val: boolean) => void;
 }) {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(() => {
+    if (typeof window !== "undefined") {
+      const savedCount = localStorage.getItem("tasbihCount");
+      return savedCount ? parseInt(savedCount, 10) : 0;
+    }
+    return 0;
+  });
   const [isMuted, setIsMuted] = useState(false);
 
   const incrementRef = useRef<HTMLButtonElement>(null);
@@ -109,6 +115,10 @@ export default function TasbihCounter({
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [incrementCounter, decrementCounter]);
+
+  useEffect(() => {
+    localStorage.setItem("tasbihCount", count.toString());
+  }, [count]);
 
   const formattedCount = count.toString().padStart(6, "0");
 

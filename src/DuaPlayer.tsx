@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { AudioLines, Play, Volume2 } from "lucide-react";
+import { AudioLines, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import duaAudio from "@/audio/DUA_OF_YUNUS.mp3";
 
