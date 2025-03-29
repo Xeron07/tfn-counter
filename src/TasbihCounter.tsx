@@ -172,10 +172,8 @@ export default function TasbihCounter({
                 !!open && handleChangeCount(`${count}`)
               }>
               <DrawerTrigger asChild>
-                <Button
-                  variant='outline'
-                  className='h-10 text-green-600 border-green-600 hover:bg-green-50'>
-                  <Save size={18} />
+                <Button className='h-10 text-green-600 border-green-600 hover:bg-green-50'>
+                  <Save size={18} className='text-green-600' />
                 </Button>
               </DrawerTrigger>
               <DrawerContent className='px-6 py-10 bg-white rounded-t-lg shadow-lg'>
@@ -212,20 +210,18 @@ export default function TasbihCounter({
             <Button
               onClick={resetCounter}
               disabled={count === 0}
-              variant='outline'
               className={`h-10 text-green-600 border-green-600 hover:bg-green-50 ${
                 count === 0 ? "opacity-50 cursor-not-allowed" : ""
               }`}>
-              <RotateCcw size={18} />
+              <RotateCcw size={18} className='text-green-600' />
             </Button>
             <Button
               onClick={() => toggleMute()}
-              variant='outline'
               className='h-10 text-green-600 border-green-600 hover:bg-green-50'>
               {isMuted ? (
                 <VolumeOff size={18} className='text-red-500' /> // Muted state (red)
               ) : (
-                <Volume2 size={18} /> // Unmuted state
+                <Volume2 size={18} className='text-green-600' /> // Unmuted state
               )}
             </Button>
           </div>
