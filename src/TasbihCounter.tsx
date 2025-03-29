@@ -7,6 +7,7 @@ import {
   Volume2,
   VolumeOff,
   LoaderCircle,
+  Logs,
 } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,12 +27,14 @@ export default function TasbihCounter({
   handleSubmitData,
   handleChangeName,
   handleChangeCount,
+  handleToggleCounter,
 }: {
   name: string;
   postLoading: boolean;
   handleChangeName: (val: string) => void;
   handleChangeCount: (val: string) => void;
   handleSubmitData: () => Promise<void>;
+  handleToggleCounter: (val: boolean) => void;
 }) {
   const [count, setCount] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
@@ -232,6 +235,18 @@ export default function TasbihCounter({
       <div className='mt-6 text-sm text-green-600'>
         <DuaPlayer />
       </div>
+      <Button
+        onClick={() => handleToggleCounter(false)}
+        className=' bg-green-600 hover:bg-green-700  rounded-full shadow-lg transition-all active:scale-95 w-14 h-14 fixed bottom-10 left-4 z-50'
+        variant={"outline"}
+        style={{
+          backgroundColor: "#01301C",
+          borderRadius: "calc(infinity * 1px)",
+          border: "4px solid black",
+          color: "#00EA86",
+        }}>
+        <Logs className='size-8' />
+      </Button>
     </div>
   );
 }

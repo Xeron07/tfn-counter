@@ -285,6 +285,7 @@ function App() {
           handleChangeCount={setCount}
           handleChangeName={setName}
           handleSubmitData={handleSubmit}
+          handleToggleCounter={setViewTasbihCounter}
         />
       )}
     </div>
